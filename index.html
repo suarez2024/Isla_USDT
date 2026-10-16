@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏝️ La Isla del Tesoro USDT</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+  :root {
+    --oro:#ffd700;
+    --oro-oscuro:#b8860b;
+    --oro-claro:#fff176;
+    --verde:#00ff88;
+    --azul:#0a0a2e;
+    --azul-2:#151545;
+    --morado:#6a0dad;
+    --glass: rgba(255,255,255,0.05);
+  }
+  body {
+    background:
+      linear-gradient(rgba(10,10,46,.82), rgba(5,5,26,.88)),
+      url('Isla del tesoro al atardecer.png') center/cover no-repeat fixed,
+      radial-gradient(ellipse at top, #1a1a4e 0%, #0a0a2e 50%, #05051a 100%);
+    color:#fff;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--azul); }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(var(--oro), var(--oro-oscuro)); border-radius: 4px; }
+
+  #estrellas {
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+  }
+  .estrella {
+    position:absolute; width:2px; height:2px; background:#fff;
+    border-radius:50%; opacity:.6;
+    animation: parpadeo 3s infinite;
+  }
+  @keyframes parpadeo {
+    0%,100% { opacity:.3; }
+    50% { opacity:1; }
+  }
+
+  #monedas-fondo {
+    position: fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .moneda-fondo {
+    position:absolute;
+    top: -60px;
+    font-size: 2rem;
+    animation: caerMoneda linear infinite;
+    opacity: .3;
+    filter: blur(0.5px);
+  }
+  @keyframes caerMoneda {
+    0% { transform: translateY(-60px) rotate(0deg); opacity: 0; }
+    10% { opacity: .3; }
+    90% { opacity: .3; }
+    100% { transform: translateY(calc(100vh + 60px)) rotate(720deg); opacity: 0; }
+  }
+
+  .cofre-decor {
+    position: fixed;
+    font-size: 4rem;
+    opacity: .08;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(1px);
+  }
+
+  header {
+    position:relative; z-index:10;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1rem 2rem;
+    background: rgba(10,10,46,.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--oro);
+  }
+  .logo {
+    font-family:'Orbitron'; font-weight:900; font-size:1.6rem;
+    color:var(--oro);
+    text-shadow: 0 0 15px rgba(255,215,0,.7);
+    cursor:pointer;
+  }
+  .logo span { color:var(--verde); }
+  .user-info {
+    display:flex; gap:1rem; align-items:center; flex-wrap:wrap;
+  }
+  .saldo {
+    background: linear-gradient(135deg, #1a1a4e, #2a2a6e);
+    padding:.5rem 1rem; border-radius:10px;
+    border:1px solid var(--oro);
+    font-family:'Orbitron'; font-weight:700;
+  }
+  .saldo .num { color:var(--verde); }
+  .saldo small { display:block; font-size:.65rem; color:#aaa; letter-spacing:1px; }
+  .btn-logout {
+    background: rgba(255,68,102,.15);
+    border: 1px solid #ff4466;
+    color: #ff4466;
+    padding: .5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Orbitron';
+    font-weight: 700;
+    font-size: .75rem;
+    transition: all .3s;
+  }
+  .btn-logout:hover { background: rgba(255,68,102,.3); transform: scale(1.05); }
+
+  nav {
+    position:relative; z-index:10;
+    display:flex; gap:.5rem; justify-content:center;
+    padding:1rem; flex-wrap:wrap;
+  }
+  nav button {
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,215,0,.3);
+    color:#fff; padding:.7rem 1.3rem;
+    border-radius:30px; cursor:pointer;
+    font-family:'Orbitron'; font-weight:700; font-size:.85rem;
+    transition: all .3s;
+  }
+  nav button:hover {
+    background: rgba(255,215,0,.15);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(255,215,0,.4);
+  }
+  nav button.active {
+    background: linear-gradient(135deg, var(--oro), var(--oro-oscuro));
+    color:#0a0a2e;
+    box-shadow: 0 0 25px rgba(255,215,0,.6);
+  }
+
+  main {
+    position:relative; z-index:10;
+    max-width:1100px; margin: 0 auto; padding: 1rem 2rem 4rem;
+  }
+  .seccion { display:none; animation: fadeIn .5s; }
+  .seccion.activa { display:block; }
+  @keyframes fadeIn {
+    from { opacity:0; transform: translateY(15px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  h1 {
+    font-family:'Orbitron'; font-size:2.4rem;
+    color:var(--oro); text-align:center;
+    text-shadow: 0 0 25px rgba(255,215,0,.6);
+    margin-bottom:1rem;
+  }
+  h2 {
+    font-family:'Orbitron'; font-size:1.5rem;
+    color:var(--verde); margin-bottom:1rem;
+  }
+  h3 { font-family:'Orbitron'; margin-bottom:.5rem; color:var(--oro); }
+  p { line-height:1.6; color:#ccc; }
+
+  .grid { display:grid; gap:1.5rem; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); }
+  .card {
+    background: linear-gradient(135deg, rgba(21,21,69,.9), rgba(10,10,46,.9));
+    border: 1px solid rgba(255,215,0,.3);
+    border-radius: 18px;
+    padding: 1.5rem;
+    position:relative; overflow:hidden;
+    transition: all .3s;
+  }
+  .card::before {
+    content:''; position:absolute; top:-50%; left:-50%;
+    width:200%; height:200%;
+    background: conic-gradient(from 0deg, transparent, rgba(255,215,0,.15), transparent 30%);
+    animation: rotar 6s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes rotar { to { transform: rotate(360deg); } }
+  .card > * { position:relative; z-index:1; }
+
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: var(--oro);
+    box-shadow: 0 15px 40px rgba(255,215,0,.25);
+  }
+
+  input, select {
+    width:100%; padding:.8rem 1rem;
+    background: rgba(0,0,0,.4);
+    border:1px solid rgba(255,215,0,.4);
+    border-radius:10px;
+    color:#fff; font-size:1rem;
+    margin-bottom:1rem;
+    font-family:'Poppins';
+  }
+  input:focus, select:focus {
+    outline:none; border-color:var(--verde);
+    box-shadow: 0 0 15px rgba(0,255,136,.3);
+  }
+  label { display:block; margin-bottom:.3rem; font-size:.85rem; color:#aaa; }
+
+  .btn {
+    display:inline-block;
+    padding:.9rem 2rem;
+    background: linear-gradient(135deg, var(--oro), var(--oro-oscuro));
+    color:#0a0a2e; font-family:'Orbitron'; font-weight:700;
+    border:none; border-radius:10px; cursor:pointer;
+    font-size:1rem; letter-spacing:1px;
+    transition: all .3s;
+    text-transform:uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,.3) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform .5s;
+  }
+  .btn:hover::after { transform: translateX(100%); }
+  .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255,215,0,.7);
+  }
+  .btn.verde {
+    background: linear-gradient(135deg, var(--verde), #00aa55);
+    color:#0a0a2e;
+  }
+  .btn.verde:hover { box-shadow: 0 0 30px rgba(0,255,136,.7); }
+  .btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+  .hero {
+    text-align:center; padding: 2rem 0;
+  }
+  .hero .mascota {
+    font-size: 6rem;
+    display:inline-block;
+    animation: flotar 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(255,215,0,.7));
+  }
+  @keyframes flotar {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  .hero p { max-width:650px; margin: 1rem auto; font-size:1.1rem; }
+
+  .barra {
+    height:20px; background: rgba(0,0,0,.5);
+    border-radius:10px; overflow:hidden;
+    border:1px solid rgba(255,215,0,.3);
+    margin: .5rem 0 1rem;
+  }
+  .barra-fill {
+    height:100%;
+    background: linear-gradient(90deg, var(--verde), var(--oro));
+    width:0%;
+    transition: width 1s ease;
+    box-shadow: 0 0 15px var(--verde);
+  }
+
+  .cofre {
+    font-size: 5rem;
+    text-align:center;
+    cursor:pointer;
+    user-select:none;
+    transition: transform .3s;
+    filter: drop-shadow(0 0 20px rgba(255,215,0,.5));
+  }
+  .cofre:hover { transform: scale(1.1) rotate(-5deg); }
+  .cofre.abriendo { animation: sacudir .5s; }
+  @keyframes sacudir {
+    0%,100% { transform: rotate(0); }
+    25% { transform: rotate(-15deg); }
+    75% { transform: rotate(15deg); }
+  }
+
+  .qr {
+    width: 200px; height:200px;
+    background:
+      repeating-conic-gradient(#000 0 25%, #fff 0 50%) 0 0/20px 20px;
+    margin: 1rem auto;
+    border: 6px solid #fff;
+    border-radius: 10px;
+    image-rendering: pixelated;
+  }
+
+  .direccion {
+    background: rgba(0,0,0,.6);
+    padding: 1rem;
+    border-radius: 10px;
+    font-family: monospace;
+    word-break: break-all;
+    border: 1px dashed var(--oro);
+    margin: 1rem 0;
+    font-size:.85rem;
+    color: var(--verde);
+  }
+
+  .historial-item {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:.8rem 1rem;
+    background: rgba(0,0,0,.3);
+    border-radius:10px;
+    margin-bottom:.5rem;
+    border-left: 3px solid var(--verde);
+    font-size:.9rem;
+  }
+  .historial-item.rojo { border-left-color:#ff4466; }
+  .historial-item .fecha { color:#888; font-size:.75rem; }
+
+  .link-ref {
+    display:flex; gap:.5rem;
+    background: rgba(0,0,0,.5);
+    padding:.5rem;
+    border-radius:10px;
+    border: 1px solid var(--verde);
+    margin: 1rem 0;
+  }
+  .link-ref input {
+    margin:0; border:none; background:transparent; color:var(--verde);
+    font-family:monospace;
+  }
+
+  #toast {
+    position: fixed;
+    top: 20px; right: 20px;
+    background: linear-gradient(135deg, var(--verde), #00aa55);
+    color:#0a0a2e;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-family:'Orbitron'; font-weight:700;
+    box-shadow: 0 10px 30px rgba(0,255,136,.5);
+    transform: translateX(400px);
+    transition: transform .4s;
+    z-index: 9999;
+    max-width: 320px;
+  }
+  #toast.mostrar { transform: translateX(0); }
+  #toast.error {
+    background: linear-gradient(135deg, #ff4466, #aa2244);
+    color:#fff;
+  }
+
+  .modal-bg {
+    position:fixed; inset:0;
+    background: rgba(0,0,0,.8);
+    display:none; align-items:center; justify-content:center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+  }
+  .modal-bg.activo { display:flex; animation: fadeIn .3s; }
+  .modal {
+    background: linear-gradient(135deg, #1a1a4e, #0a0a2e);
+    border: 2px solid var(--oro);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 400px; width: 90%;
+    text-align:center;
+    box-shadow: 0 20px 60px rgba(255,215,0,.3);
+  }
+  .modal .emoji { font-size: 4rem; margin-bottom:1rem; }
+  .modal h3 { font-size:1.5rem; margin-bottom:1rem; }
+
+  .sonido-toggle {
+    position:fixed; bottom:20px; right:20px;
+    width:50px; height:50px; border-radius:50%;
+    background: var(--azul-2);
+    border: 2px solid var(--oro);
+    color: var(--oro);
+    font-size:1.4rem; cursor:pointer;
+    z-index: 100;
+    transition: all .3s;
+  }
+  .sonido-toggle:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--oro); }
+
+  .historia {
+    max-width: 800px; margin: 0 auto;
+  }
+  .capitulo {
+    background: rgba(21,21,69,.7);
+    border-left: 4px solid var(--oro);
+    padding: 1.2rem 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+  .capitulo h3 { color:var(--oro); }
+  .capitulo p { color:#ccc; }
+
+  .ejemplo-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+  .ejemplo-tabla th, .ejemplo-tabla td {
+    padding: .8rem;
+    text-align: center;
+    border: 1px solid rgba(255,215,0,.2);
+  }
+  .ejemplo-tabla th {
+    background: linear-gradient(135deg, rgba(255,215,0,.15), rgba(255,215,0,.05));
+    color: var(--oro);
+    font-family: 'Orbitron';
+    font-size: .8rem;
+  }
+  .ejemplo-tabla td { font-size: .9rem; }
+  .ejemplo-tabla td strong { color: var(--verde); }
+  .ejemplo-tabla td .fecha { font-size: .7rem; color: #888; }
+  .tabla-scroll { overflow-x: auto; }
+
+  .paso-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--oro), var(--oro-oscuro));
+    color: #0a0a2e;
+    border-radius: 50%;
+    font-family: 'Orbitron';
+    font-weight: 900;
+    font-size: 1.2rem;
+    margin-bottom: .5rem;
+  }
+
+  .login-bg {
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at center, #1a1a4e 0%, #0a0a2e 60%, #05051a 100%);
+    z-index: 5000;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .login-bg.oculto { display: none; }
+  .login-card {
+    background: linear-gradient(135deg, rgba(26,26,78,.95), rgba(10,10,46,.95));
+    border: 2px solid var(--oro);
+    border-radius: 24px;
+    padding: 2.5rem;
+    max-width: 420px; width: 90%;
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(255,215,0,.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .login-card::before {
+    content:''; position:absolute; top:-50%; left:-50%;
+    width:200%; height:200%;
+    background: conic-gradient(from 0deg, transparent, rgba(255,215,0,.1), transparent 30%);
+    animation: rotar 8s linear infinite;
+    pointer-events:none;
+  }
+  .login-card > * { position: relative; z-index: 1; }
+  .login-logo {
+    font-size: 4rem;
+    display: inline-block;
+    animation: flotar 3s ease-in-out infinite;
+    margin-bottom: .5rem;
+  }
+  .login-tabs {
+    display: flex;
+    gap: .5rem;
+    margin-bottom: 1.5rem;
+  }
+  .login-tabs button {
+    flex: 1;
+    padding: .7rem;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,215,0,.3);
+    color: #aaa;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Orbitron';
+    font-weight: 700;
+    font-size: .85rem;
+    transition: all .3s;
+  }
+  .login-tabs button.active {
+    background: linear-gradient(135deg, var(--oro), var(--oro-oscuro));
+    color: #0a0a2e;
+    border-color: var(--oro);
+  }
+  .login-input-group {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  .login-input-group input {
+    margin-bottom: 0;
+    padding-right: 2.5rem;
+  }
+  .toggle-pass {
+    position: absolute;
+    right: .8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: .6;
+    transition: opacity .2s;
+    background: none;
+    border: none;
+  }
+  .toggle-pass:hover { opacity: 1; }
+  .login-btn {
+    width: 100%;
+    margin-top: .5rem;
+  }
+  .login-error {
+    color: #ff4466;
+    font-size: .8rem;
+    margin-top: .5rem;
+    min-height: 1.2em;
+  }
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: .8rem 0;
+    font-size: .85rem;
+    color: #aaa;
+    cursor: pointer;
+  }
+  .remember-me input { width: auto; margin: 0; }
+
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9000;
+  }
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 3s ease-in forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  .contador {
+    display: inline-block;
+    transition: all .3s;
+  }
+
+  footer {
+    text-align:center; padding: 2rem;
+    color:#666; font-size:.8rem;
+    border-top: 1px solid rgba(255,215,0,.2);
+    margin-top: 3rem;
+  }
+
+  .menu-mobile {
+    display: none;
+    width: 100%;
+    padding: .8rem 1.5rem;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,215,0,.3);
+    color: #fff;
+    border-radius: 10px;
+    font-family: 'Orbitron';
+    font-size: .9rem;
+    cursor: pointer;
+    margin-bottom: .5rem;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: .8rem 1rem; flex-direction:column; gap:.5rem; }
+    .logo { font-size:1.2rem; }
+    h1 { font-size:1.6rem; }
+    main { padding: 1rem; }
+    .user-info { justify-content: center; }
+    nav { display: none; flex-direction: column; }
+    nav.mostrar { display: flex; }
+    .menu-mobile { display: block; }
+    nav button { border-radius: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="estrellas"></div>
+<div id="monedas-fondo"></div>
+
+<div class="cofre-decor" style="bottom:5%;left:3%;">🧰</div>
+<div class="cofre-decor" style="top:15%;right:2%;">💰</div>
+<div class="cofre-decor" style="bottom:20%;right:5%;">🗝️</div>
+
+<div class="login-bg" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">🏝️</div>
+    <h2 style="color:var(--oro);margin-bottom:.3rem">Isla USDT</h2>
+    <p style="font-size:.85rem;color:#aaa;margin-bottom:1.5rem">La Leyenda del Tesoro Digital</p>
+    <div class="login-tabs">
+      <button class="active" id="tabLogin" onclick="switchTab('login')">Ingresar</button>
+      <button id="tabRegister" onclick="switchTab('register')">Crear Cuenta</button>
+    </div>
+    <div class="login-input-group">
+      <input type="text" id="loginUser" placeholder="Usuario" autocomplete="username">
+    </div>
+    <div class="login-input-group">
+      <input type="password" id="loginPass" placeholder="Contraseña" autocomplete="current-password">
+      <button type="button" class="toggle-pass" onclick="togglePass()">👁️</button>
+    </div>
+    <div id="confirmPassGroup" class="login-input-group" style="display:none">
+      <input type="password" id="confirmPass" placeholder="Confirmar contraseña">
+    </div>
+    <label class="remember-me">
+      <input type="checkbox" id="rememberMe"> Recordar sesión
+    </label>
+    <button class="btn login-btn" onclick="handleAuth()">🚀 Comenzar Aventura</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<header id="mainHeader" style="display:none">
+  <div class="logo" onclick="cambiarSeccion('inicio')">🏝️ ISLA<span>USDT</span></div>
+  <div class="user-info">
+    <div class="saldo">
+      <small>INVERSIÓN</small>
+      <span class="num contador" id="saldoInversion">0.00</span> USDT
+    </div>
+    <div class="saldo">
+      <small>GANANCIAS</small>
+      <span class="num contador" id="saldoGanancias">0.00</span> USDT
+    </div>
+    <div class="saldo" style="border-color:var(--morado)">
+      <small>PIRATA</small>
+      <span class="num" id="userNameDisplay" style="color:var(--oro-claro)">—</span>
+    </div>
+    <button class="btn-logout" onclick="logout()">✖ Salir</button>
+  </div>
+</header>
+
+<button class="menu-mobile" id="menuBtn" onclick="toggleMenu()">☰ Menú</button>
+
+<nav id="mainNav" style="display:none">
+  <button class="active" onclick="cambiarSeccion('inicio', this)">🏴‍☠️ Inicio</button>
+  <button onclick="cambiarSeccion('como-funciona', this)">❓ Cómo Funciona</button>
+  <button onclick="cambiarSeccion('historia', this)">📖 Historia</button>
+  <button onclick="cambiarSeccion('invertir', this)">💎 Invertir</button>
+  <button onclick="cambiarSeccion('depositar', this)">📥 Depositar</button>
+  <button onclick="cambiarSeccion('referidos', this)">👥 Referidos</button>
+  <button onclick="cambiarSeccion('retirar', this)">📤 Retirar</button>
+</nav>
+
+<main id="mainContent" style="display:none">
+
+  <section id="inicio" class="seccion activa">
+    <div class="hero">
+      <div class="mascota">🦜</div>
+      <h1>¡Bienvenido, <span id="heroUser">Explorador</span>!</h1>
+      <p>El capitán <strong style="color:var(--oro)">CriptoPerico</strong> te ha reclutado para la expedición más grande del mundo digital. Invierte USDT, abre cofres del tesoro y recluta tripulación para multiplicar tus ganancias.</p>
+      <button class="btn" onclick="cambiarSeccion('como-funciona')">📖 Aprender a Invertir</button>
+    </div>
+
+    <div class="grid" style="margin-top:2rem">
+      <div class="card">
+        <div style="font-size:3rem">⚓</div>
+        <h3><span class="paso-num">1</span> Deposita</h3>
+        <p>Envía USDT (TRC20) a tu cofre digital. Cada depósito desbloquea nueva isla.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:3rem">💎</div>
+        <h3><span class="paso-num">2</span> Invierte</h3>
+        <p>Elige tu plan de tesoro. Ganancia simulada del 1% al 3% diario.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:3rem">🏴‍☠️</div>
+        <h3><span class="paso-num">3</span> Recluta</h3>
+        <p>Invita piratas. Gana 10% de comisión en cada nivel (hasta 3 niveles).</p>
+      </div>
+      <div class="card">
+        <div style="font-size:3rem">💰</div>
+        <h3><span class="paso-num">4</span> Retira</h3>
+        <p>Cobra tus ganancias directamente a tu billetera TRC20 cuando quieras.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:2rem;text-align:center">
+      <h2>🎁 Cofre Diario</h2>
+      <p>Abre tu cofre una vez al día y llévate una recompensa sorpresa.</p>
+      <div class="cofre" id="cofre" onclick="abrirCofre()">🎁</div>
+      <p id="cofreEstado" style="margin-top:1rem;color:#aaa">Toca el cofre para abrirlo</p>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="seccion">
+    <h1>❓ ¿Cómo Funciona la Inversión?</h1>
+    <p style="text-align:center;max-width:700px;margin:0 auto 2rem">La inversión en <strong style="color:var(--oro)">Isla USDT</strong> es sencilla: depositas USDT, eliges un plan, y tu dinero genera ganancias cada día. Aquí te explicamos con ejemplos reales:</p>
+
+    <div class="card" style="margin-bottom:2rem">
+      <h2>📊 Tabla de Ejemplos — ¿Cuánto Puedes Generar?</h2>
+      <table class="ejemplo-tabla">
+        <tr>
+          <th>Plan</th>
+          <th>Inversión</th>
+          <th>Ganancia Diaria</th>
+          <th>Duración</th>
+          <th>Ganancia Total</th>
+        </tr>
+        <tr>
+          <td>⚓ Explorador</td>
+          <td>10 USDT</td>
+          <td><strong>+0.10 USDT</strong></td>
+          <td>30 días</td>
+          <td><strong>+3 USDT</strong></td>
+        </tr>
+        <tr>
+          <td>🏴‍☠️ Capitán</td>
+          <td>100 USDT</td>
+          <td><strong>+2 USDT</strong></td>
+          <td>45 días</td>
+          <td><strong>+90 USDT</strong></td>
+        </tr>
+        <tr>
+          <td>👑 Leyenda</td>
+          <td>1,000 USDT</td>
+          <td><strong>+30 USDT</strong></td>
+          <td>60 días</td>
+          <td><strong>+1,800 USDT</strong></td>
+        </tr>
+      </table>
+      <p style="font-size:.8rem;color:#888;margin-top:.5rem">* Los porcentajes son 1%, 2% y 3% diario sobre tu inversión. Al final del plan recuperas tu capital más las ganancias acumuladas.</p>
+    </div>
+
+    <div class="grid" style="margin-bottom:2rem">
+      <div class="card" style="text-align:center">
+        <div style="font-size:3rem">💵</div>
+        <h3>¿Qué es USDT?</h3>
+        <p>USDT (Tether) es una moneda digital estable que siempre vale 1 dólar. Es como tener dólares pero en el mundo digital: rápido, seguro y sin fronteras.</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:3rem">⚡</div>
+        <h3>¿Por qué TRC20?</h3>
+        <p>Usamos la red TRON (TRC20) porque las comisiones son casí gratis y las transacciones llegan en segundos. Tu dirección empieza con la letra "T".</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:3rem">🔒</div>
+        <h3>¿Es Seguro?</h3>
+        <p>Tus fondos se mantienen en tu propia billetera. Nadie puede acceder sin tu autorización. Retiras directamente a tu dirección TRC20.</p>
+      </div>
+    </div>
+
+    <div class="card" style="background:linear-gradient(135deg,rgba(106,13,173,.2),rgba(10,10,46,.9));border-color:var(--morado)">
+      <h2 style="color:var(--oro-claro)">🧮 Fórmula Simplificada</h2>
+      <p style="margin-bottom:1rem">Tu ganancia diaria se calcula así:</p>
+      <div style="background:rgba(0,0,0,.4);padding:1rem;border-radius:10px;text-align:center;font-family:'Orbitron';font-size:1.1rem;color:var(--verde);margin-bottom:1rem">
+        Ganancia = Inversión × Porcentaje
+      </div>
+      <p><strong style="color:var(--oro)">Ejemplo:</strong> Si inviertes <strong>100 USDT</strong> en el plan Capitán (2% diario):</p>
+      <p style="color:var(--verde);font-family:'Orbitron';font-size:1.3rem;margin:.5rem 0">100 × 0.02 = 2 USDT por día</p>
+      <p>En 45 días: <strong style="color:var(--verde)">2 × 45 = 90 USDT de ganancia</strong> + recuperas tus 100 USDT.</p>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem">
+      <button class="btn verde" onclick="cambiarSeccion('invertir')">💎 Ver Planes de Inversión</button>
+    </div>
+  </section>
+
+  <section id="historia" class="seccion">
+    <h1>📖 La Leyenda del Tesoro Digital</h1>
+    <div class="historia">
+      <div class="capitulo">
+        <h3>Capítulo I — El Mapa Perdido</h3>
+        <p>Hace 300 años, el capitán CriptoPerico escondió su tesoro en la isla de <strong>Blockchainia</strong>. Para encontrarlo necesitas monedas USDT que abren puertas mágicas.</p>
+      </div>
+      <div class="capitulo">
+        <h3>Capítulo II — La Tripulación</h3>
+        <p>Ningún pirata llega solo. Recluta amigos y comparte el botín: cada vez que un miembro de tu tripulación invierte, tú recibes una comisión automática.</p>
+      </div>
+      <div class="capitulo">
+        <h3>Capítulo III — El Cofre Mágico</h3>
+        <p>Tu inversión crece cada día. El cofre produce gemas (ganancias) que puedes acumular o retirar a tu billetera TRC20.</p>
+      </div>
+      <div class="capitulo">
+        <h3>Capítulo IV — El Retiro del Tesoro</h3>
+        <p>Cuando decidas zarpar, tus USDT se transfieren directo a tu billetera. Sin intermediarios, sin demoras.</p>
+      </div>
+      <div style="text-align:center;margin-top:2rem">
+        <button class="btn verde" onclick="cambiarSeccion('invertir')">💎 Invertir Ahora</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="invertir" class="seccion">
+    <h1>Planes de Inversión</h1>
+    <p style="text-align:center;margin-bottom:2rem">Elige tu plan. Todos son demostrativos.</p>
+    <div class="grid">
+      <div class="card">
+        <div style="font-size:2.5rem">⚓</div>
+        <h3>Plan Explorador</h3>
+        <p style="color:var(--verde);font-size:1.5rem;font-family:'Orbitron'">1.0% / día</p>
+        <p>Mínimo: 10 USDT · 30 días</p>
+        <button class="btn" id="btn-plan-0" onclick="seleccionarPlan(0)">Elegir Plan</button>
+      </div>
+      <div class="card" style="border-color:var(--verde)">
+        <div style="font-size:2.5rem">🏴‍☠️</div>
+        <h3>Plan Capitán ⭐</h3>
+        <p style="color:var(--verde);font-size:1.5rem;font-family:'Orbitron'">2.0% / día</p>
+        <p>Mínimo: 100 USDT · 45 días</p>
+        <button class="btn verde" id="btn-plan-1" onclick="seleccionarPlan(1)">Elegir Plan</button>
+      </div>
+      <div class="card">
+        <div style="font-size:2.5rem">👑</div>
+        <h3>Plan Leyenda</h3>
+        <p style="color:var(--verde);font-size:1.5rem;font-family:'Orbitron'">3.0% / día</p>
+        <p>Mínimo: 1000 USDT · 60 días</p>
+        <button class="btn" id="btn-plan-2" onclick="seleccionarPlan(2)">Elegir Plan</button>
+      </div>
+    </div>
+    <div id="plan-pendiente" style="display:none;text-align:center;margin-top:1.5rem">
+      <div class="card" style="border-color:var(--verde);background:linear-gradient(135deg,rgba(0,255,136,.1),rgba(10,10,46,.9))">
+        <p id="plan-pendiente-texto" style="color:var(--verde);font-family:'Orbitron';font-size:1.1rem"></p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:2rem">
+      <h3>📊 Tu inversión activa</h3>
+      <div id="inversionActiva">
+        <p style="color:#888">Aún no tienes una inversión activa.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="depositar" class="seccion">
+    <h1>📥 Depositar USDT (TRC20)</h1>
+    <div class="card" style="max-width:600px;margin:0 auto;text-align:center">
+      <p>Escanea el código QR o copia la dirección para depositar:</p>
+      <div class="qr"></div>
+      <div class="direccion" id="dirTRX">TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE</div>
+      <button class="btn" onclick="copiarDireccion()">📋 Copiar Dirección</button>
+
+      <hr style="margin:2rem 0;border-color:rgba(255,215,0,.2)">
+      <h3>🧪 Simulador de depósito</h3>
+      <p style="font-size:.85rem;color:#888">En producción aquí detectaríamos tu transacción real en la blockchain.</p>
+      <label>Monto a simular (USDT)</label>
+      <input type="number" id="montoDep" placeholder="Ej: 50" min="1">
+      <button class="btn verde" onclick="simularDeposito()">💸 Simular depósito</button>
+    </div>
+
+    <div class="card" style="margin-top:2rem">
+      <h3>📜 Historial de depósitos</h3>
+      <div id="histDepositos"><p style="color:#888">Sin movimientos aún.</p></div>
+    </div>
+  </section>
+
+  <section id="referidos" class="seccion">
+    <h1>👥 Recluta tu Tripulación</h1>
+
+    <div class="card">
+      <h3>🔗 Tu link de invitación</h3>
+      <p>Comparte este enlace. Cuando tus referidos inviertan, recibes comisión.</p>
+      <div class="link-ref">
+        <input type="text" id="linkRef" value="https://islausdt.demo/?ref=PIRATA001" readonly>
+        <button class="btn" onclick="copiarLink()">Copiar</button>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:1.5rem">
+      <div class="card">
+        <h3>🏅 Nivel 1 (directo)</h3>
+        <p style="font-size:2rem;color:var(--oro);font-family:'Orbitron'">10%</p>
+        <p>Referidos: <strong id="ref1">0</strong> · Comisión: <strong id="com1">0.00</strong> USDT</p>
+      </div>
+      <div class="card">
+        <h3>🥈 Nivel 2</h3>
+        <p style="font-size:2rem;color:var(--oro);font-family:'Orbitron'">5%</p>
+        <p>Referidos: <strong id="ref2">0</strong> · Comisión: <strong id="com2">0.00</strong> USDT</p>
+      </div>
+      <div class="card">
+        <h3>🥉 Nivel 3</h3>
+        <p style="font-size:2rem;color:var(--oro);font-family:'Orbitron'">2%</p>
+        <p>Referidos: <strong id="ref3">0</strong> · Comisión: <strong id="com3">0.00</strong> USDT</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1.5rem">
+      <h3>📋 Lista de Referidos</h3>
+      <div id="listaReferidos"><p style="color:#888">Aún no tienes referidos.</p></div>
+    </div>
+
+    <div class="card" style="margin-top:1.5rem;text-align:center">
+      <h3>🧪 Simular referido</h3>
+      <p style="font-size:.85rem;color:#888">Demo: simula que alguien se registró con tu link e invirtió.</p>
+      <button class="btn verde" onclick="simularReferido()">➕ Simular nuevo referido</button>
+    </div>
+  </section>
+
+  <section id="retirar" class="seccion">
+    <h1>📤 Retirar Ganancias</h1>
+
+    <div class="card" style="max-width:600px;margin:0 auto">
+      <h3>Saldo disponible</h3>
+      <p style="font-size:2.5rem;color:var(--verde);font-family:'Orbitron'" id="saldoRetiro">0.00 USDT</p>
+
+      <label>Dirección TRC20 de destino</label>
+      <input type="text" id="dirRetiro" placeholder="T...">
+
+      <label>Monto a retirar (USDT)</label>
+      <input type="number" id="montoRetiro" placeholder="Mínimo 10 USDT" min="10">
+
+      <button class="btn verde" onclick="retirar()">💸 Solicitar Retiro</button>
+      <p style="font-size:.75rem;color:#888;margin-top:1rem">Procesamiento: 24-48h (demo instantáneo).</p>
+    </div>
+
+    <div class="card" style="margin-top:2rem">
+      <h3>📜 Historial de retiros</h3>
+      <div id="histRetiros"><p style="color:#888">Sin retiros aún.</p></div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="mainFooter" style="display:none">
+  ⚠️ Demo con fines de presentación · No maneja fondos reales · Isla USDT © 2025
+</footer>
+
+<button class="sonido-toggle" id="btnSonido" onclick="toggleSonido()" style="display:none">🔊</button>
+
+<audio id="bgMusic" loop preload="auto">
+  <source src="videoplayback.m4a" type="audio/mp4">
+</audio>
+
+<div id="toast"></div>
+<div class="confetti-container" id="confettiBox"></div>
+
+<div class="modal-bg" id="modal" onclick="cerrarModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="emoji" id="modalEmoji">🎉</div>
+    <h3 id="modalTitulo">¡Felicidades!</h3>
+    <p id="modalTexto">Has ganado una recompensa.</p>
+    <button class="btn" style="margin-top:1.5rem" onclick="cerrarModal()">Aceptar</button>
+  </div>
+</div>
+
+<script>
+const estado = {
+  user: null,
+  inversion: 0,
+  ganancias: 0,
+  referidos: { n1: 0, n2: 0, n3: 0, c1: 0, c2: 0, c3: 0 },
+  referidosLista: [],
+  historialDepositos: [],
+  historialRetiros: [],
+  planActivo: null,
+  planPendiente: null,
+  sonidoActivo: true,
+  cofreAbierto: false
+};
+
+const STORAGE_USERS = 'islaUSDT_usuarios';
+const STORAGE_SESSION = 'islaUSDT_sesion';
+const STORAGE_PREFIX = 'islaUSDT_datos_';
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_USERS)) || {}; }
+  catch { return {}; }
+}
+
+function saveUsers(users) {
+  localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+}
+
+function getUserData(user) {
+  try { return JSON.parse(localStorage.getItem(STORAGE_PREFIX + user)); }
+  catch { return null; }
+}
+
+function saveUserData() {
+  if (!estado.user) return;
+  const data = {
+    inversion: estado.inversion,
+    ganancias: estado.ganancias,
+    referidos: estado.referidos,
+    referidosLista: estado.referidosLista,
+    historialDepositos: estado.historialDepositos,
+    historialRetiros: estado.historialRetiros,
+    cofreAbierto: estado.cofreAbierto
+  };
+  localStorage.setItem(STORAGE_PREFIX + estado.user, JSON.stringify(data));
+}
+
+function loadUserData(user) {
+  const data = getUserData(user);
+  if (data) {
+    estado.inversion = data.inversion || 0;
+    estado.ganancias = data.ganancias || 0;
+    estado.referidos = data.referidos || { n1: 0, n2: 0, n3: 0, c1: 0, c2: 0, c3: 0 };
+    estado.referidosLista = data.referidosLista || [];
+    estado.historialDepositos = data.historialDepositos || [];
+    estado.historialRetiros = data.historialRetiros || [];
+    estado.cofreAbierto = data.cofreAbierto || false;
+  } else {
+    estado.inversion = 0;
+    estado.ganancias = 0;
+    estado.referidos = { n1: 0, n2: 0, n3: 0, c1: 0, c2: 0, c3: 0 };
+    estado.referidosLista = [];
+    estado.historialDepositos = [];
+    estado.historialRetiros = [];
+    estado.cofreAbierto = false;
+  }
+  estado.planActivo = null;
+}
+
+(function crearEstrellas() {
+  const cont = document.getElementById('estrellas');
+  for (let i = 0; i < 120; i++) {
+    const e = document.createElement('div');
+    e.className = 'estrella';
+    e.style.left = Math.random() * 100 + '%';
+    e.style.top = Math.random() * 100 + '%';
+    e.style.animationDelay = Math.random() * 3 + 's';
+    cont.appendChild(e);
+  }
+})();
+
+(function crearMonedas() {
+  const cont = document.getElementById('monedas-fondo');
+  const monedas = ['🪙', '💰', '💵', '✨'];
+  for (let i = 0; i < 10; i++) {
+    const m = document.createElement('div');
+    m.className = 'moneda-fondo';
+    m.textContent = monedas[Math.floor(Math.random() * monedas.length)];
+    m.style.left = Math.random() * 95 + '%';
+    m.style.fontSize = (1.2 + Math.random() * 1.5) + 'rem';
+    m.style.animationDuration = (8 + Math.random() * 12) + 's';
+    m.style.animationDelay = (Math.random() * 10) + 's';
+    cont.appendChild(m);
+  }
+})();
+
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let ctx = null;
+
+function beep(freq, duracion = 0.1, tipo = 'sine', volumen = 0.15) {
+  if (!estado.sonidoActivo) return;
+  if (!ctx) ctx = new AudioCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = tipo;
+  osc.frequency.value = freq;
+  gain.gain.value = volumen;
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duracion);
+  osc.stop(ctx.currentTime + duracion);
+}
+
+const sonidos = {
+  click: () => beep(600, 0.05, 'square', 0.08),
+  exito: () => { beep(523, .1); setTimeout(()=>beep(659,.1), 100); setTimeout(()=>beep(784,.2), 200); },
+  moneda: () => { beep(988,.06,'triangle',.2); setTimeout(()=>beep(1318,.1,'triangle',.2), 60); },
+  cofre: () => { beep(200,.15,'sawtooth',.15); setTimeout(()=>beep(400,.1,'sawtooth',.15), 150); setTimeout(()=>beep(800,.2,'sawtooth',.15), 250); },
+  error: () => { beep(200,.2,'sawtooth',.15); },
+  levelup: () => { [523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.15),i*100)); },
+  login: () => { beep(440,.1); setTimeout(()=>beep(554,.1), 100); setTimeout(()=>beep(659,.15), 200); setTimeout(()=>beep(880,.25), 300); }
+};
+
+function toggleSonido() {
+  estado.sonidoActivo = !estado.sonidoActivo;
+  document.getElementById('btnSonido').textContent = estado.sonidoActivo ? '🔊' : '🔇';
+  const music = document.getElementById('bgMusic');
+  if (estado.sonidoActivo) {
+    music.volume = 0.3;
+    music.play().catch(() => {});
+  } else {
+    music.pause();
+  }
+  if (estado.sonidoActivo) sonidos.click();
+}
+
+function iniciarMusica() {
+  const music = document.getElementById('bgMusic');
+  music.volume = 0.3;
+  music.play().catch(() => {});
+}
+
+function switchTab(tab) {
+  sonidos.click();
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('confirmPassGroup').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('loginError').textContent = '';
+}
+
+function togglePass() {
+  const input = document.getElementById('loginPass');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function handleAuth() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const isRegister = document.getElementById('tabRegister').classList.contains('active');
+  const errorEl = document.getElementById('loginError');
+
+  if (!user || user.length < 4) {
+    errorEl.textContent = 'El usuario debe tener al menos 4 caracteres';
+    sonidos.error();
+    return;
+  }
+  if (!pass || pass.length < 6) {
+    errorEl.textContent = 'La contraseña debe tener al menos 6 caracteres';
+    sonidos.error();
+    return;
+  }
+
+  const users = getUsers();
+
+  if (isRegister) {
+    const confirm = document.getElementById('confirmPass').value;
+    if (pass !== confirm) {
+      errorEl.textContent = 'Las contraseñas no coinciden';
+      sonidos.error();
+      return;
+    }
+    if (users[user]) {
+      errorEl.textContent = 'Ese usuario ya existe. Intenta ingresar.';
+      sonidos.error();
+      return;
+    }
+    users[user] = { pass, creado: Date.now() };
+    saveUsers(users);
+    estado.user = user;
+    saveSession();
+    enterApp();
+    sonidos.login();
+    toast('¡Cuenta creada! Bienvenido a la isla');
+  } else {
+    if (!users[user] || users[user].pass !== pass) {
+      errorEl.textContent = 'Usuario o contraseña incorrectos';
+      sonidos.error();
+      return;
+    }
+    estado.user = user;
+    saveSession();
+    enterApp();
+    sonidos.login();
+    toast('¡Bienvenido de vuelta!');
+  }
+}
+
+function saveSession() {
+  const remember = document.getElementById('rememberMe').checked;
+  if (remember) {
+    localStorage.setItem(STORAGE_SESSION, estado.user);
+  } else {
+    sessionStorage.setItem(STORAGE_SESSION, estado.user);
+  }
+}
+
+function clearSession() {
+  localStorage.removeItem(STORAGE_SESSION);
+  sessionStorage.removeItem(STORAGE_SESSION);
+}
+
+function enterApp() {
+  document.getElementById('loginScreen').classList.add('oculto');
+  document.getElementById('mainHeader').style.display = 'flex';
+  document.getElementById('mainNav').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'block';
+  document.getElementById('mainFooter').style.display = 'block';
+  document.getElementById('btnSonido').style.display = 'block';
+
+  loadUserData(estado.user);
+  iniciarMusica();
+  document.getElementById('userNameDisplay').textContent = estado.user;
+  document.getElementById('heroUser').textContent = estado.user;
+  actualizarUI();
+  renderHistDepositos();
+  renderHistRetiros();
+  renderReferidosLista();
+  renderBotonesPlanes();
+  if (estado.cofreAbierto) {
+    document.getElementById('cofre').textContent = '📭';
+    document.getElementById('cofreEstado').textContent = '✅ Cofre abierto. Vuelve mañana.';
+  }
+}
+
+function logout() {
+  saveUserData();
+  estado.user = null;
+  estado.planActivo = null;
+  clearSession();
+  document.getElementById('loginScreen').classList.remove('oculto');
+  document.getElementById('mainHeader').style.display = 'none';
+  document.getElementById('mainNav').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'none';
+  document.getElementById('mainFooter').style.display = 'none';
+  document.getElementById('btnSonido').style.display = 'none';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('confirmPass').value = '';
+  sonidos.click();
+}
+
+function checkSession() {
+  const user = localStorage.getItem(STORAGE_SESSION) || sessionStorage.getItem(STORAGE_SESSION);
+  if (user) {
+    estado.user = user;
+    enterApp();
+  }
+}
+
+document.getElementById('loginPass').addEventListener('keypress', e => {
+  if (e.key === 'Enter') handleAuth();
+});
+
+function toggleMenu() {
+  document.getElementById('mainNav').classList.toggle('mostrar');
+}
+
+function cambiarSeccion(id, btn) {
+  if (estado.user) saveUserData();
+  sonidos.click();
+  document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+  document.getElementById(id).classList.add('activa');
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('nav button').forEach(b => {
+      if (b.textContent.toLowerCase().includes(id.slice(0,4))) b.classList.add('active');
+    });
+  }
+  document.getElementById('mainNav').classList.remove('mostrar');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toast(msg, esError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = esError ? 'error mostrar' : 'mostrar';
+  setTimeout(() => t.classList.remove('mostrar'), 3200);
+}
+
+function mostrarModal(emoji, titulo, texto) {
+  document.getElementById('modalEmoji').textContent = emoji;
+  document.getElementById('modalTitulo').textContent = titulo;
+  document.getElementById('modalTexto').textContent = texto;
+  document.getElementById('modal').classList.add('activo');
+}
+function cerrarModal(e) {
+  if (e && e.target.id !== 'modal') return;
+  document.getElementById('modal').classList.remove('activo');
+  sonidos.click();
+}
+
+function lanzarConfetti() {
+  const box = document.getElementById('confettiBox');
+  const colores = ['#ffd700', '#00ff88', '#ff6b9d', '#6a0dad', '#fff176'];
+  for (let i = 0; i < 20; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.background = colores[Math.floor(Math.random() * colores.length)];
+    c.style.animationDelay = (Math.random() * 0.5) + 's';
+    c.style.width = (6 + Math.random() * 8) + 'px';
+    c.style.height = (6 + Math.random() * 8) + 'px';
+    box.appendChild(c);
+    setTimeout(() => c.remove(), 3500);
+  }
+}
+
+function actualizarUI() {
+  const sInv = document.getElementById('saldoInversion');
+  const sGan = document.getElementById('saldoGanancias');
+  if (sInv) sInv.textContent = estado.inversion.toFixed(2);
+  if (sGan) sGan.textContent = estado.ganancias.toFixed(2);
+  const sRet = document.getElementById('saldoRetiro');
+  if (sRet) sRet.textContent = estado.ganancias.toFixed(2) + ' USDT';
+
+  const r1 = document.getElementById('ref1');
+  if (r1) {
+    document.getElementById('ref1').textContent = estado.referidos.n1;
+    document.getElementById('ref2').textContent = estado.referidos.n2;
+    document.getElementById('ref3').textContent = estado.referidos.n3;
+    document.getElementById('com1').textContent = estado.referidos.c1.toFixed(2);
+    document.getElementById('com2').textContent = estado.referidos.c2.toFixed(2);
+    document.getElementById('com3').textContent = estado.referidos.c3.toFixed(2);
+  }
+}
+
+function abrirCofre() {
+  if (estado.cofreAbierto) {
+    toast('Ya abriste tu cofre hoy. Vuelve mañana', true);
+    sonidos.error();
+    return;
+  }
+  const cofre = document.getElementById('cofre');
+  cofre.classList.add('abriendo');
+  sonidos.cofre();
+  setTimeout(() => {
+    cofre.classList.remove('abriendo');
+    cofre.textContent = '📭';
+    const premios = [0.5, 1, 2, 5, 10];
+    const premio = premios[Math.floor(Math.random() * premios.length)];
+    estado.ganancias += premio;
+    estado.cofreAbierto = true;
+    actualizarUI();
+    saveUserData();
+    sonidos.moneda();
+    mostrarModal('🎉', '¡Cofre abierto!', `Has ganado ${premio} USDT de recompensa.`);
+    document.getElementById('cofreEstado').textContent = '✅ Cofre abierto. Vuelve mañana.';
+  }, 500);
+}
+
+function invertir(monto, tasaDiaria, dias) {
+  if (estado.planActivo) {
+    toast('Ya tienes un plan activo. Espera a que termine.', true);
+    sonidos.error();
+    return;
+  }
+  estado.inversion = monto;
+  estado.planActivo = { monto, tasaDiaria, dias, inicio: Date.now() };
+  actualizarUI();
+  saveUserData();
+  renderBotonesPlanes();
+
+  document.getElementById('inversionActiva').innerHTML = `
+    <p><strong>Plan activo:</strong> ${monto} USDT</p>
+    <p><strong>Ganancia diaria:</strong> ${(monto * tasaDiaria).toFixed(2)} USDT (${(tasaDiaria*100).toFixed(1)}%)</p>
+    <p><strong>Duración:</strong> ${dias} días</p>
+    <div class="barra"><div class="barra-fill" id="barraProg" style="width:0%"></div></div>
+    <p style="font-size:.8rem;color:#888">Progreso simulado — la barra avanza sola para la demo.</p>
+  `;
+
+  let progreso = 0;
+  const intervalo = setInterval(() => {
+    progreso += 2;
+    const barra = document.getElementById('barraProg');
+    if (barra) barra.style.width = progreso + '%';
+    if (progreso >= 100) clearInterval(intervalo);
+  }, 300);
+
+  const gananciaIntervalo = setInterval(() => {
+    if (!estado.planActivo) { clearInterval(gananciaIntervalo); return; }
+    const ganancia = monto * tasaDiaria * 0.1;
+    estado.ganancias += ganancia;
+    actualizarUI();
+    saveUserData();
+    sonidos.moneda();
+  }, 2000);
+
+  setTimeout(() => {
+    clearInterval(gananciaIntervalo);
+    lanzarConfetti();
+    toast('¡Plan completado! Ganancia total acreditada.');
+    sonidos.levelup();
+    estado.planActivo = null;
+    saveUserData();
+  }, dias * 500);
+
+  sonidos.exito();
+  toast(`Inversión de ${monto} USDT activada`);
+}
+
+function copiarDireccion() {
+  navigator.clipboard.writeText(document.getElementById('dirTRX').textContent);
+  sonidos.moneda();
+  toast('Dirección TRC20 copiada');
+}
+function copiarLink() {
+  navigator.clipboard.writeText(document.getElementById('linkRef').value);
+  sonidos.moneda();
+  toast('Link de referido copiado');
+}
+
+function renderBotonesPlanes() {
+  for (let i = 0; i < 3; i++) {
+    const btn = document.getElementById(`btn-plan-${i}`);
+    if (btn) {
+      btn.textContent = estado.planPendiente === i ? 'Activar Plan' : 'Elegir Plan';
+      btn.classList.toggle('verde', estado.planPendiente === i);
+    }
+  }
+}
+
+const planes = [
+  { nombre: 'Explorador', minimo: 10, tasa: 0.01, dias: 30 },
+  { nombre: 'Capitán', minimo: 100, tasa: 0.02, dias: 45 },
+  { nombre: 'Leyenda', minimo: 1000, tasa: 0.03, dias: 60 }
+];
+
+function seleccionarPlan(idx) {
+  if (estado.planActivo) {
+    toast('Ya tienes un plan activo', true);
+    sonidos.error();
+    return;
+  }
+  estado.planPendiente = idx;
+  const plan = planes[idx];
+  const div = document.getElementById('plan-pendiente');
+  const txt = document.getElementById('plan-pendiente-texto');
+  txt.textContent = `Plan ${plan.nombre} seleccionado. Deposita ${plan.minimo} USDT para activarlo.`;
+  div.style.display = 'block';
+  document.getElementById(`btn-plan-${idx}`).textContent = 'Activar Plan';
+  document.getElementById(`btn-plan-${idx}`).classList.add('verde');
+  sonidos.click();
+  toast(`Plan ${plan.nombre} seleccionado. Deposita ${plan.minimo} USDT.`);
+  cambiarSeccion('depositar');
+}
+
+function activarPlanPendiente() {
+  const idx = estado.planPendiente;
+  if (idx === null || idx === undefined) return false;
+  const plan = planes[idx];
+  if (estado.inversion < plan.minimo) {
+    toast(`Necesitas al menos ${plan.minimo} USDT para este plan`, true);
+    sonidos.error();
+    return false;
+  }
+  estado.planPendiente = null;
+  document.getElementById('plan-pendiente').style.display = 'none';
+  invertir(plan.minimo, plan.tasa, plan.dias);
+  return true;
+}
+
+function simularDeposito() {
+  const monto = parseFloat(document.getElementById('montoDep').value);
+  if (!monto || monto <= 0) {
+    toast('Ingresa un monto válido', true);
+    sonidos.error();
+    return;
+  }
+  estado.historialDepositos.unshift({
+    monto, fecha: new Date().toLocaleString()
+  });
+  estado.inversion += monto;
+  actualizarUI();
+  renderHistDepositos();
+  saveUserData();
+
+  sonidos.moneda();
+  lanzarConfetti();
+
+  if (estado.planPendiente !== null && estado.planPendiente !== undefined) {
+    const plan = planes[estado.planPendiente];
+    if (estado.inversion >= plan.minimo) {
+      mostrarModal('💸', '¡Depósito confirmado!', `Se acreditaron ${monto} USDT. Plan ${plan.nombre} listo para activar.`);
+      document.getElementById('montoDep').value = '';
+      setTimeout(() => {
+        cambiarSeccion('invertir');
+        setTimeout(() => activarPlanPendiente(), 600);
+      }, 1000);
+      return;
+    } else {
+      const falta = plan.minimo - estado.inversion;
+      mostrarModal('💸', '¡Depósito confirmado!', `Te falta ${falta.toFixed(2)} USDT para activar el plan ${plan.nombre}.`);
+    }
+  } else {
+    mostrarModal('💸', '¡Depósito confirmado!', `Se acreditaron ${monto} USDT a tu cuenta (simulado).`);
+  }
+  document.getElementById('montoDep').value = '';
+}
+
+function renderHistDepositos() {
+  const cont = document.getElementById('histDepositos');
+  if (!estado.historialDepositos.length) {
+    cont.innerHTML = '<p style="color:#888">Sin movimientos aún.</p>';
+    return;
+  }
+  cont.innerHTML = estado.historialDepositos.map(d => `
+    <div class="historial-item">
+      <span>💸 +${d.monto.toFixed(2)} USDT</span>
+      <span class="fecha">${d.fecha}</span>
+    </div>
+  `).join('');
+}
+
+function simularReferido() {
+  const nivel = Math.floor(Math.random() * 3) + 1;
+  const monto = [50, 100, 200, 500, 1000][Math.floor(Math.random() * 5)];
+  const comisiones = { 1: 0.10, 2: 0.05, 3: 0.02 };
+  const comision = monto * comisiones[nivel];
+  const nombres = ['PirataCarlos', 'LoboDeMar77', 'Corsario99', 'MarinaX', 'CapitanRojo', 'SirenaGold', 'TiburonUSDT', 'GaviotaPro', 'PericoLoco', 'Navegante1'];
+  const nombre = nombres[Math.floor(Math.random() * nombres.length)] + Math.floor(Math.random() * 99);
+
+  if (nivel === 1) { estado.referidos.n1++; estado.referidos.c1 += comision; }
+  if (nivel === 2) { estado.referidos.n2++; estado.referidos.c2 += comision; }
+  if (nivel === 3) { estado.referidos.n3++; estado.referidos.c3 += comision; }
+
+  estado.referidosLista.unshift({
+    usuario: nombre,
+    nivel,
+    monto,
+    comision,
+    fecha: new Date().toLocaleString()
+  });
+
+  estado.ganancias += comision;
+  actualizarUI();
+  renderReferidosLista();
+  saveUserData();
+  sonidos.levelup();
+  mostrarModal('👥', '¡Nuevo referido!', `${nombre} (nivel ${nivel}) invirtió ${monto} USDT. Ganaste ${comision.toFixed(2)} USDT.`);
+}
+
+function renderReferidosLista() {
+  const cont = document.getElementById('listaReferidos');
+  if (!cont) return;
+  if (!estado.referidosLista.length) {
+    cont.innerHTML = '<p style="color:#888">Aún no tienes referidos.</p>';
+    return;
+  }
+  cont.innerHTML = `
+    <div style="overflow-x:auto">
+      <table class="ejemplo-tabla">
+        <tr>
+          <th>Usuario</th>
+          <th>Nivel</th>
+          <th>Inversión</th>
+          <th>Tu Ganancia</th>
+          <th>Fecha</th>
+        </tr>
+        ${estado.referidosLista.map(r => `
+          <tr>
+            <td>${r.usuario}</td>
+            <td>${'🏅'.repeat(1)}${r.nivel === 1 ? 'N1' : r.nivel === 2 ? '🥈 N2' : '🥉 N3'}</td>
+            <td><strong>${r.monto} USDT</strong></td>
+            <td style="color:var(--verde)">+${r.comision.toFixed(2)} USDT</td>
+            <td class="fecha">${r.fecha}</td>
+          </tr>
+        `).join('')}
+      </table>
+    </div>
+  `;
+}
+
+function retirar() {
+  const direccion = document.getElementById('dirRetiro').value.trim();
+  const monto = parseFloat(document.getElementById('montoRetiro').value);
+
+  if (!direccion || direccion.length < 20 || !direccion.startsWith('T')) {
+    toast('Ingresa una dirección TRC20 válida (empieza con T)', true);
+    sonidos.error();
+    return;
+  }
+  if (!monto || monto < 10) {
+    toast('El mínimo de retiro es 10 USDT', true);
+    sonidos.error();
+    return;
+  }
+  if (monto > estado.ganancias) {
+    toast('Saldo insuficiente en ganancias', true);
+    sonidos.error();
+    return;
+  }
+
+  estado.ganancias -= monto;
+  estado.historialRetiros.unshift({
+    monto, direccion, fecha: new Date().toLocaleString(), estado: 'procesado'
+  });
+  actualizarUI();
+  renderHistRetiros();
+  saveUserData();
+
+  sonidos.exito();
+  lanzarConfetti();
+  mostrarModal('📤', '¡Retiro solicitado!', `${monto} USDT serán enviados a ${direccion.slice(0,8)}...${direccion.slice(-6)} (simulado).`);
+  document.getElementById('montoRetiro').value = '';
+  document.getElementById('dirRetiro').value = '';
+}
+
+function renderHistRetiros() {
+  const cont = document.getElementById('histRetiros');
+  if (!estado.historialRetiros.length) {
+    cont.innerHTML = '<p style="color:#888">Sin retiros aún.</p>';
+    return;
+  }
+  cont.innerHTML = estado.historialRetiros.map(r => `
+    <div class="historial-item">
+      <span>📤 -${r.monto.toFixed(2)} USDT → ${r.direccion.slice(0,6)}...${r.direccion.slice(-4)}</span>
+      <span class="fecha">${r.fecha}</span>
+    </div>
+  `).join('');
+}
+
+actualizarUI();
+checkSession();
+</script>
+
+</body>
+</html>
